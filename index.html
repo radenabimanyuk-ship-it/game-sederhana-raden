@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Game Klik Kotak</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: linear-gradient(135deg, #74ebd5, #9face6);
+      text-align: center;
+      color: #222;
+    }
+
+    h1 {
+      margin-top: 20px;
+    }
+
+    #info {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      font-size: 20px;
+      margin: 10px 0;
+      font-weight: bold;
+    }
+
+    #gameArea {
+      width: 90vw;
+      max-width: 400px;
+      height: 500px;
+      margin: 20px auto;
+      background: white;
+      border-radius: 16px;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+          #box {
+      width: 60px;
+      height: 60px;
+      background: #ff4d4d;
+      border-radius: 12px;
+      position: absolute;
+      top: 100px;
+      left: 100px;
+      display: none;
+      cursor: pointer;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    }
+
+    button {
+      padding: 12px 20px;
+      font-size: 18px;
+      border: none;
+      border-radius: 10px;
+      background: #222;
+      color: white;
+      cursor: pointer;
+      margin-bottom: 20px;
+    }
+
+    button:hover {
+      background: #444;
+    }
+
+    #message {
+      font-size: 18px;
+      margin-top: 10px;
+      font-weight: bold;
+      }
+  </style>
+</head>
+<body>
+  <h1>Game Klik Kotak</h1>
+
+  <div id="info">
+    <div>Skor: <span id="score">0</span></div>
+    <div>Waktu: <span id="time">15</span></div>
+  </div>
+
+  <button onclick="startGame()">Mulai Game</button>
+  <div id="message">Tekan tombol "Mulai Game"</div>
+
+  <div id="gameArea">
+    <div id="box"></div>
+  </div>
+
+  <script>
+    let score = 0;
+    let timeLeft = 15;
+    let timer;
+    let gameRunning = false;
+
+    const box = document.getElementById("box");
+    const scoreEl = document.getElementById("score");
+    const timeEl = document.getElementById("time");
+    const messageEl = document.getElementById("message");
+    const gameArea = document.getElementById("gameArea");
+        function randomPosition() {
+      const maxX = gameArea.clientWidth - box.clientWidth;
+      const maxY = gameArea.clientHeight - box.clientHeight;
+
+      const x = Math.floor(Math.random() * maxX);
+      const y = Math.floor(Math.random() * maxY);
+
+      box.style.left = x + "px";
+      box.style.top = y + "px";
+    }
+
+    function startGame() {
+      score = 0;
+      timeLeft = 15;
+      gameRunning = true;
+
+      scoreEl.textContent = score;
+      timeEl.textContent = timeLeft;
+      messageEl.textContent = "Klik kotaknya secepat mungkin!";
+      box.style.display = "block";
+      randomPosition();
+      clearInterval(timer);
+      timer = setInterval(() => {
+        timeLeft--;
+        timeEl.textContent = timeLeft;
+
+        if (timeLeft <= 0) {
+          clearInterval(timer);
+          gameRunning = false;
+          box.style.display = "none";
+          messageEl.textContent = "Game selesai! Skor akhir kamu: " + score;
+        }
+      }, 1000);
+    }
+
+    box.addEventListener("click", () => {
+      if (!gameRunning) return;
+      score++;
+      scoreEl.textContent = score;
+      randomPosition();
+    });
+  </script>
+</body>
+</html>
